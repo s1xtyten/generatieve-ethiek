@@ -3,7 +3,7 @@ import { createDropdownMenu } from './components/dropdown-menu.js';
 import { OpenRouter } from "@openrouter/sdk";
 
 // Retrieve env variables for inference calls
-const openRouterModel = import.meta.env.VITE_MODEL_ID
+const openRouterModel = "mistralai/mistral-small-3.1-24b-instruct:free"
 const openRouterKey = import.meta.env.VITE_OPENROUTER_KEY
 
 // Create OpenRouter object for inference calls
@@ -48,7 +48,7 @@ let userMessageCount = 0;
 const dropdown = createDropdownMenu();
 
 // define variable for LLM choice via dropdown
-let selectedLLM = ""; // or "inference"
+let selectedLLM = "inference"; // or "inference"
 
 // Listen for model selection changes
 dropdown.addEventListener('modelChange', (e) => {
@@ -100,7 +100,6 @@ function addMessageToUI(text, sender) {
 
 // handle submitting
 chatForm.addEventListener('submit', async (e) => {
-  console.log(selectedLLM)
   e.preventDefault();
 
   const message = messageInput.value.trim();
@@ -149,7 +148,7 @@ chatForm.addEventListener('submit', async (e) => {
     // INFERENCE LLM (OpenRouter)
     // ============================
     else if (selectedLLM === "inference") {
-      console.log('calling inference LLM')
+      console.log(`calling inference LLM with model: ${openRouterModel}`)
       const sysPrompt = `
         You are an omniscient AI ethicist and will respond to all
         questions from the perspective of applying
