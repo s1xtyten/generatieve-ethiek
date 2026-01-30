@@ -3,7 +3,7 @@ import { createDropdownMenu } from './components/dropdown-menu.js';
 import { OpenRouter } from "@openrouter/sdk";
 
 // Retrieve env variables for inference calls
-const openRouterModel = "mistralai/mistral-small-3.1-24b-instruct:free"
+const openRouterModel = "tngtech/deepseek-r1t2-chimera:free"
 const openRouterKey = import.meta.env.VITE_OPENROUTER_KEY
 
 // Create OpenRouter object for inference calls
@@ -287,30 +287,4 @@ async function callLocalLLM(prompt, onToken) {
       }
     }
   }
-}
-
-// Streaming functionality
-async function handleLLMResponse(prompt) {
-  // Show typing indicator immediately
-  const typingIndicator = addTypingIndicator();
-
-  // Prepare final message bubble (empty for now)
-  const llmTextNode = addMessageToUI("", "assistant");
-
-  // Remove indicator as soon as the first token arrives
-  let firstToken = true;
-  
-  
-  await callLocalLLM(prompt, (token) => {
-    if (firstToken) {
-      removeTypingIndicator(typingIndicator);
-      firstToken = false;
-    }
-
-    llmTextNode.textContent += token;
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  });
-
-  // Safety: if model returns nothing, still remove indicator
-  if (firstToken) removeTypingIndicator(typingIndicator);
 }
